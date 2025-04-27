@@ -6,9 +6,11 @@ WORKDIR /app
 
 # 必要なPythonパッケージをインストール
 COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
-RUN python3 -c "import whisper; whisper.load_model('tiny')"
+RUN python3 -m venv venv
+RUN ./venv/bin/pip install --upgrade pip
+RUN ./venv/bin/pip install --no-cache-dir -r requirements.txt
+RUN mkdir -p /app/models && ./venv/bin/python3 -c "import whisper; whisper.load_model('tiny', download_root='/app/models')"
+
 
 # アプリコードをコピー
 COPY app.py .
@@ -18,4 +20,4 @@ COPY app.py .
 EXPOSE 8000
 
 # コンテナ起動時にアプリを実行
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["./venv/bin/uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
