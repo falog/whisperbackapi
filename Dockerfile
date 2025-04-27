@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-RUN python3 -c "import whisper; whisper.load_model('small')"
+RUN python3 -c "import whisper; whisper.load_model('tiny')"
 
 # アプリコードをコピー
 COPY app.py .
